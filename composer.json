@@ -1,0 +1,35 @@
+{
+  "name": "tomcan/dmarc",
+  "description": "PHP library to fetch and parse DMARC DNS records",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tom Cannaerts",
+      "email": "mot@tom.be"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "tomcan/public-suffix-list": "^2.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "TomCan\\Dmarc\\": "src/"
+    }
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.68",
+    "phpstan/phpstan": "^2.1"
+  },
+  "scripts": {
+    "cs": [
+      "php-cs-fixer fix -v --dry-run --diff"
+    ],
+    "cs-apply": [
+      "php-cs-fixer fix -v"
+    ],
+    "phpstan": [
+      "phpstan  analyse --level=10 src"
+    ]
+  }
+}
