@@ -2,6 +2,8 @@
 
 namespace TomCan\Dmarc;
 
+use TomCan\Dmarc\Exception\DmarcInvalidFormatException;
+use TomCan\Dmarc\Exception\DmarcMultipleRecordsException;
 use TomCan\PublicSuffixList\PSLInterface;
 
 class DmarcParser
@@ -33,8 +35,10 @@ class DmarcParser
         if (1 == count($records)) {
             // must have exactly 1 record
             return $this->validateRecord($records[0]);
-        } else {
+        } elseif (0 == count($records)) {
             return null;
+        } else {
+            throw new DmarcMultipleRecordsException($records, 'Multiple DMARC records found');
         }
     }
 
@@ -98,15 +102,15 @@ class DmarcParser
     /**
      * @param array<string,mixed> $record
      *
-     * @return array<string,mixed>|null
+     * @return array<string,mixed>
      */
-    public function validateRecord(array $record): ?array
+    public function validateRecord(array $record): array
     {
         // check if values are valid
         $keys = array_keys($record);
         if (($keys[0] ?? '') != 'v' || 'DMARC1' != $record['v']) {
             // first key must be v and must have value DMARC1
-            return null;
+            throw new DmarcInvalidFormatException('Record must start with "v=DMARC1"');
         } elseif (
             !in_array($record['p'] ?? 'invalid', ['none', 'quarantine', 'reject'])
             || (isset($record['sp']) && !in_array($record['sp'], ['none', 'quarantine', 'reject']))
