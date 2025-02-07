@@ -8,19 +8,20 @@
     "packages": [
         {
             "name": "tomcan/public-suffix-list",
-            "version": "v2.3.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TomCan/public-suffix-list.git",
-                "reference": "ca111da7a0ad2d6c44aeb78980a411f60c7f1f5b"
+                "reference": "719b8a2b8ddcd6e65d3a1d4548ca063b0e9d520e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TomCan/public-suffix-list/zipball/ca111da7a0ad2d6c44aeb78980a411f60c7f1f5b",
-                "reference": "ca111da7a0ad2d6c44aeb78980a411f60c7f1f5b",
+                "url": "https://api.github.com/repos/TomCan/public-suffix-list/zipball/719b8a2b8ddcd6e65d3a1d4548ca063b0e9d520e",
+                "reference": "719b8a2b8ddcd6e65d3a1d4548ca063b0e9d520e",
                 "shasum": ""
             },
             "require": {
+                "ext-intl": "*",
                 "php": ">=7.4"
             },
             "require-dev": {
@@ -46,9 +47,9 @@
             "description": "A PHP consumable version of the DNS top level domains public suffix list from publicsuffix.org.",
             "support": {
                 "issues": "https://github.com/TomCan/public-suffix-list/issues",
-                "source": "https://github.com/TomCan/public-suffix-list/tree/v2.3.0"
+                "source": "https://github.com/TomCan/public-suffix-list/tree/v2.4.0"
             },
-            "time": "2025-02-06T22:19:26+00:00"
+            "time": "2025-02-07T18:47:36+00:00"
         }
     ],
     "packages-dev": [
