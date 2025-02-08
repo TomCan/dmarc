@@ -1,0 +1,49 @@
+name: Scheduled build to update the list
+
+on:
+  push:
+
+jobs:
+  stan-and-style:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Composer install
+        run: |
+          composer install
+
+      - name: Run phpstan
+        run: |
+          composer run phpstan
+
+      - name: Run php-cs-fixer
+        run: |
+          composer run cs
+
+  phpunit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Composer install
+        run: |
+          composer install
+
+      - name: Run phpunit
+        run: |
+          composer run phpunit
