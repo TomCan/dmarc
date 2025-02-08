@@ -52,7 +52,7 @@ class DmarcParser
     }
 
     /**
-     * @return array<array<string,mixed>>
+     * @return array<array<string,string>>
      */
     private function fetchDmarcRecords(string $domain): array
     {
@@ -74,7 +74,7 @@ class DmarcParser
     }
 
     /**
-     * @return array<string,mixed>|null
+     * @return array<string,string>|null
      */
     private function tryParsingAsDmarc(string $text): ?array
     {
@@ -100,30 +100,27 @@ class DmarcParser
     }
 
     /**
-     * @param array<string,mixed> $record
+     * @param array<string,string> $record
      *
      * @return array<string,mixed>
+     *
+     * @throws DmarcInvalidFormatException
      */
     public function validateRecord(array $record): array
     {
+        $uriParser = new DmarcUriParser();
         // check if values are valid
         $keys = array_keys($record);
         if (($keys[0] ?? '') != 'v' || 'DMARC1' != $record['v']) {
             // first key must be v and must have value DMARC1
             throw new DmarcInvalidFormatException('Record must start with "v=DMARC1"');
         } elseif (
+            // Does not contain valid p-tags, or contains invalid sp-tag.
             !in_array($record['p'] ?? 'invalid', ['none', 'quarantine', 'reject'])
             || (isset($record['sp']) && !in_array($record['sp'], ['none', 'quarantine', 'reject']))
         ) {
-            // does not contain valid p-tags, or contains invalid sp-tag
-            /*
-               if a "rua" tag is present and contains at least one
-               syntactically valid reporting URI, the Mail Receiver SHOULD
-               act as if a record containing a valid "v" tag and "p=none"
-               was retrieved, and continue processing;
-            */
-            // for now, just check for rua tag
-            if (isset($record['rua'])) {
+            // If rua tag with at least 1 valid URI, then set p=none instead.
+            if (isset($record['rua']) && !empty($uriParser->parseAll($record['rua'], true))) {
                 $record['p'] = 'none';
             } else {
                 throw new DmarcInvalidFormatException('Invalid or missing policy, or invalid sp, and no rua tag with valid reporting URI');
