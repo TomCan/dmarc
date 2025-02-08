@@ -52,15 +52,15 @@ class DmarcParserTest extends TestCase
         return [
             [
                 ['v' => 'DMARC1', 'p' => 'none'],
-                ['v' => 'DMARC1', 'p' => 'none']
+                ['v' => 'DMARC1', 'p' => 'none'],
             ],
             [
                 ['v' => 'DMARC1', 'p' => 'quarantine', 'sp' => 'reject'],
-                ['v' => 'DMARC1', 'p' => 'quarantine', 'sp' => 'reject']
+                ['v' => 'DMARC1', 'p' => 'quarantine', 'sp' => 'reject'],
             ],
             [
                 ['v' => 'DMARC1', 'rua' => 'mailto:dmarc@example.com'],
-                ['v' => 'DMARC1', 'rua' => 'mailto:dmarc@example.com', 'p' => 'none']
+                ['v' => 'DMARC1', 'rua' => 'mailto:dmarc@example.com', 'p' => 'none'],
             ],
         ];
     }
