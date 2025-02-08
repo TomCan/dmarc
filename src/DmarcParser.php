@@ -125,6 +125,8 @@ class DmarcParser
             // for now, just check for rua tag
             if (isset($record['rua'])) {
                 $record['p'] = 'none';
+            } else {
+                throw new DmarcInvalidFormatException('Invalid or missing policy, or invalid sp, and no rua tag with valid reporting URI');
             }
         }
 
