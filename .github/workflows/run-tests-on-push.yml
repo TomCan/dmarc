@@ -1,4 +1,4 @@
-name: Scheduled build to update the list
+name: Run tests on push
 
 on:
   push:
