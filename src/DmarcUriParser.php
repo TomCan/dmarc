@@ -11,7 +11,7 @@ class DmarcUriParser
      *
      * @throws DmarcInvalidFormatException
      */
-    public function parseAll(string $uris): array
+    public function parseAll(string $uris, bool $ignoreInvalid = false): array
     {
         $result = [];
 
@@ -25,7 +25,10 @@ class DmarcUriParser
                     'limit' => $matches[3] ?? '',
                 ];
             } else {
-                throw new DmarcInvalidFormatException('Invalid URI format');
+                if (false === $ignoreInvalid) {
+                    // don't continue, throw exception
+                    throw new DmarcInvalidFormatException('Invalid URI format');
+                }
             }
         }
 

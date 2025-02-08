@@ -64,6 +64,21 @@ class DmarcUriParserTest extends TestCase
         $results = $this->dmarcUriParser->parseAll($multiple);
     }
 
+    public function testMultipleWithIgnore(): void
+    {
+        $valid = $this->validUriProvider();
+        $invalid = $this->invalidUriProvider();
+
+        // invalid in the middle should be stripped
+        $multiple = $valid[0][0].','.$invalid[0][0].','.$valid[1][0];
+        $results = $this->dmarcUriParser->parseAll($multiple, true);
+        $this->assertEquals($results, [$valid[0][1], $valid[1][1]], 'Invalid URI in the middle should be stripped.');
+
+        $multiple = $invalid[0][0].','.$valid[0][0].','.$invalid[1][0];
+        $results = $this->dmarcUriParser->parseAll($multiple, true);
+        $this->assertEquals($results, [$valid[0][1]], 'Invalid URI at start and end should be stripped.');
+    }
+
     public function validUriProvider(): array
     {
         return [
