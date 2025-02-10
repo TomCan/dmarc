@@ -127,6 +127,36 @@ class DmarcParser
             }
         }
 
+        // test other tags, regexp based
+        foreach (['aspf' => '^[rs]$', 'adkim' => '^[rs]$', 'fo' => '^[01ds]$', 'p' => '^(none|quarantine|reject)$', 'sp' => '^(none|quarantine|reject)$', 'rf' => '^afrf$'] as $key => $regexp) {
+            if (isset($record[$key]) && !preg_match('/'.$regexp.'/', $record[$key])) {
+                throw new DmarcInvalidFormatException('Invalid value for '.$key);
+            }
+        }
+
+        // test numeric tags
+        foreach (['pct' => [1, 100], 'ri' => [1, 4294967295]] as $key => $range) {
+            if (isset($record[$key])) {
+                $value = intval($record[$key]);
+                if (strval($value) != $record[$key]) {
+                    // value given is not strict integer, like 1.0, or 2.5
+                    throw new DmarcInvalidFormatException('Invalid value for '.$key);
+                } elseif ($value < $range[0] || $value > $range[1]) {
+                    throw new DmarcInvalidFormatException('Invalid value for '.$key);
+                }
+            }
+        }
+
+        // test uri tags
+        foreach (['rua', 'ruf'] as $key) {
+            if (isset($record[$key])) {
+                if (0 == count($uriParser->parseAll($record[$key], true))) {
+                    throw new DmarcInvalidFormatException('No valid uris found in '.$key);
+                }
+            }
+        }
+
+        // we got here, return the record
         return $record;
     }
 }
